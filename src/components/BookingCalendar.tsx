@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 interface Booking {
@@ -111,8 +112,76 @@ export const BookingCalendar = () => {
   const availableHours = selectedDate ? getAvailableHours(selectedDate) : [];
   const dayOfWeek = selectedDate ? new Date(selectedDate + "T00:00:00").getDay() : -1;
 
+  // Get next 30 days with booking counts
+  const getDaysWithBookings = () => {
+    const days = [];
+    const today = new Date();
+    for (let i = 0; i < 30; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      const dateStr = date.toISOString().split("T")[0];
+      const dayBookings = bookings.filter((b) => b.date === dateStr).length;
+      const dayOfWeek = date.getDay();
+      const maxSlots = dayOfWeek === 6 ? 11 : dayOfWeek === 0 ? 0 : 13;
+      
+      if (maxSlots > 0) {
+        days.push({
+          date: dateStr,
+          display: date.getDate(),
+          month: date.toLocaleDateString('pt-BR', { month: 'short' }),
+          bookings: dayBookings,
+          maxSlots,
+          isToday: i === 0,
+        });
+      }
+    }
+    return days;
+  };
+
+  const daysWithBookings = getDaysWithBookings();
+
   return (
     <div className="w-full max-w-4xl mx-auto space-y-8">
+      {/* Days with bookings indicator */}
+      <Card className="p-6 bg-card border-border">
+        <h3 className="text-lg font-bold mb-4 text-foreground">
+          Próximos dias com disponibilidade
+        </h3>
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {daysWithBookings.slice(0, 15).map((day) => (
+            <button
+              key={day.date}
+              onClick={() => setSelectedDate(day.date)}
+              className={`flex-shrink-0 p-3 rounded-lg border transition-all ${
+                selectedDate === day.date
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : day.bookings >= day.maxSlots
+                  ? "bg-destructive/20 border-destructive/50 text-destructive cursor-not-allowed"
+                  : day.bookings > 0
+                  ? "bg-secondary border-border hover:border-primary"
+                  : "bg-secondary border-border hover:border-primary"
+              }`}
+              disabled={day.bookings >= day.maxSlots}
+            >
+              <div className="text-center">
+                <div className="text-xs text-muted-foreground mb-1">{day.month}</div>
+                <div className="text-xl font-bold mb-1">{day.display}</div>
+                {day.bookings > 0 ? (
+                  <Badge 
+                    variant={day.bookings >= day.maxSlots ? "destructive" : "secondary"}
+                    className="text-xs"
+                  >
+                    {day.bookings}/{day.maxSlots}
+                  </Badge>
+                ) : (
+                  <div className="text-xs text-muted-foreground">Livre</div>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+      </Card>
+
       <Card className="p-8 bg-card border-border shadow-[var(--shadow-card)]">
         <h2 className="text-3xl font-bold text-center mb-8 text-foreground">
           Agendar Horário
