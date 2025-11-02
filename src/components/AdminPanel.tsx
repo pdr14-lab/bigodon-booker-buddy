@@ -7,6 +7,8 @@ interface Booking {
   date: string;
   time: string;
   clientName: string;
+  clientPhone: string;
+  service: string;
 }
 
 export const AdminPanel = () => {
@@ -126,19 +128,29 @@ export const AdminPanel = () => {
                 getTodayBookings().map((booking, idx) => (
                   <div
                     key={idx}
-                    className="flex justify-between items-center p-4 bg-secondary rounded-lg border border-border"
+                    className="p-4 bg-secondary rounded-lg border border-border space-y-2"
                   >
-                    <div>
-                      <p className="font-medium text-foreground">{booking.time}</p>
-                      <p className="text-sm text-muted-foreground">{booking.clientName}</p>
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <p className="font-bold text-lg text-foreground">{booking.time}</p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          <span className="font-medium text-foreground">Cliente:</span> {booking.clientName}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          <span className="font-medium text-foreground">Telefone:</span> {booking.clientPhone}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          <span className="font-medium text-foreground">Serviço:</span> {booking.service}
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => deleteBooking(booking.date, booking.time)}
+                        variant="destructive"
+                        size="sm"
+                      >
+                        Cancelar
+                      </Button>
                     </div>
-                    <Button
-                      onClick={() => deleteBooking(booking.date, booking.time)}
-                      variant="destructive"
-                      size="sm"
-                    >
-                      Cancelar
-                    </Button>
                   </div>
                 ))
               )}
