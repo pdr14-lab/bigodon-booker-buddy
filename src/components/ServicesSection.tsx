@@ -36,7 +36,7 @@ export const ServicesSection = () => {
   return (
     <section className="py-16 px-4 bg-gradient-to-b from-background to-secondary/20">
       <div className="container mx-auto">
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 animate-fade-in-up">
           <h2 className="text-4xl md:text-5xl font-black mb-4 text-foreground">
             Nossos Serviços
           </h2>
@@ -51,10 +51,11 @@ export const ServicesSection = () => {
             return (
               <Card
                 key={idx}
-                className="p-6 bg-card border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)] group"
+                style={{ animationDelay: `${idx * 0.1}s` }}
+                className="p-6 bg-card border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)] hover:scale-105 group animate-fade-in-up"
               >
                 <div className="text-center">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4 group-hover:bg-primary/20 transition-all">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
                     <Icon className="w-8 h-8 text-primary" />
                   </div>
                   <h3 className="text-xl font-bold mb-2 text-foreground">

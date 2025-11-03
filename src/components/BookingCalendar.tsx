@@ -36,6 +36,7 @@ export const BookingCalendar = () => {
   const [clientPhone, setClientPhone] = useState("");
   const [selectedService, setSelectedService] = useState("");
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   useEffect(() => {
     const stored = localStorage.getItem("donBigodonBookings");
@@ -112,13 +113,23 @@ export const BookingCalendar = () => {
   const availableHours = selectedDate ? getAvailableHours(selectedDate) : [];
   const dayOfWeek = selectedDate ? new Date(selectedDate + "T00:00:00").getDay() : -1;
 
-  // Get next 30 days with booking counts
+  // Get days with booking counts for current month
   const getDaysWithBookings = () => {
     const days = [];
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
     const today = new Date();
-    for (let i = 0; i < 30; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
+    today.setHours(0, 0, 0, 0);
+    
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    
+    for (let day = 1; day <= lastDay.getDate(); day++) {
+      const date = new Date(year, month, day);
+      
+      // Skip past dates
+      if (date < today) continue;
+      
       const dateStr = date.toISOString().split("T")[0];
       const dayBookings = bookings.filter((b) => b.date === dateStr).length;
       const dayOfWeek = date.getDay();
@@ -131,7 +142,7 @@ export const BookingCalendar = () => {
           month: date.toLocaleDateString('pt-BR', { month: 'short' }),
           bookings: dayBookings,
           maxSlots,
-          isToday: i === 0,
+          isToday: date.getTime() === today.getTime(),
         });
       }
     }
@@ -140,26 +151,65 @@ export const BookingCalendar = () => {
 
   const daysWithBookings = getDaysWithBookings();
 
+  const goToPreviousMonth = () => {
+    const newMonth = new Date(currentMonth);
+    newMonth.setMonth(currentMonth.getMonth() - 1);
+    const today = new Date();
+    if (newMonth >= new Date(today.getFullYear(), today.getMonth(), 1)) {
+      setCurrentMonth(newMonth);
+    }
+  };
+
+  const goToNextMonth = () => {
+    const newMonth = new Date(currentMonth);
+    newMonth.setMonth(currentMonth.getMonth() + 1);
+    setCurrentMonth(newMonth);
+  };
+
+  const monthName = currentMonth.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-8">
+    <div className="w-full max-w-4xl mx-auto space-y-8 animate-fade-in-up">
       {/* Days with bookings indicator */}
-      <Card className="p-6 bg-card border-border">
-        <h3 className="text-lg font-bold mb-4 text-foreground">
-          Próximos dias com disponibilidade
-        </h3>
+      <Card className="p-6 bg-card border-border hover:shadow-[var(--shadow-red-glow)] transition-all duration-300">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-foreground capitalize">
+            {monthName}
+          </h3>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={goToPreviousMonth}
+              disabled={currentMonth.getMonth() === new Date().getMonth() && currentMonth.getFullYear() === new Date().getFullYear()}
+              className="hover:bg-primary/20 hover:scale-105 transition-all duration-200"
+            >
+              ←
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={goToNextMonth}
+              className="hover:bg-primary/20 hover:scale-105 transition-all duration-200"
+            >
+              →
+            </Button>
+          </div>
+        </div>
         <div className="flex gap-2 overflow-x-auto pb-2">
-          {daysWithBookings.slice(0, 15).map((day) => (
+          {daysWithBookings.map((day, idx) => (
             <button
               key={day.date}
               onClick={() => setSelectedDate(day.date)}
-              className={`flex-shrink-0 p-3 rounded-lg border transition-all ${
+              style={{ animationDelay: `${idx * 0.05}s` }}
+              className={`flex-shrink-0 p-3 rounded-lg border transition-all duration-300 animate-scale-in hover:scale-110 ${
                 selectedDate === day.date
-                  ? "bg-primary text-primary-foreground border-primary"
+                  ? "bg-primary text-primary-foreground border-primary shadow-[var(--shadow-red-glow)] scale-110"
                   : day.bookings >= day.maxSlots
                   ? "bg-destructive/20 border-destructive/50 text-destructive cursor-not-allowed"
                   : day.bookings > 0
-                  ? "bg-secondary border-border hover:border-primary"
-                  : "bg-secondary border-border hover:border-primary"
+                  ? "bg-secondary border-border hover:border-primary hover:shadow-lg"
+                  : "bg-secondary border-border hover:border-primary hover:shadow-lg"
               }`}
               disabled={day.bookings >= day.maxSlots}
             >
@@ -182,8 +232,8 @@ export const BookingCalendar = () => {
         </div>
       </Card>
 
-      <Card className="p-8 bg-card border-border shadow-[var(--shadow-card)]">
-        <h2 className="text-3xl font-bold text-center mb-8 text-foreground">
+      <Card className="p-8 bg-card border-border shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-red-glow)] transition-all duration-500 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+        <h2 className="text-3xl font-bold text-center mb-8 text-foreground animate-fade-in">
           Agendar Horário
         </h2>
 
@@ -266,12 +316,12 @@ export const BookingCalendar = () => {
                       key={hour}
                       onClick={() => !isBooked && setSelectedTime(hour)}
                       disabled={isBooked}
-                      className={`px-4 py-3 rounded-lg font-medium transition-all ${
+                      className={`px-4 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105 active:scale-95 ${
                         isBooked
                           ? "bg-destructive/20 text-destructive/60 cursor-not-allowed line-through"
                           : selectedTime === hour
-                          ? "bg-primary text-primary-foreground shadow-[var(--shadow-red-glow)]"
-                          : "bg-secondary text-foreground hover:bg-primary/20 hover:border-primary border border-border"
+                          ? "bg-primary text-primary-foreground shadow-[var(--shadow-red-glow)] animate-pulse-glow scale-105"
+                          : "bg-secondary text-foreground hover:bg-primary/20 hover:border-primary hover:shadow-lg border border-border"
                       }`}
                     >
                       {hour}
@@ -284,7 +334,7 @@ export const BookingCalendar = () => {
 
           <Button
             onClick={handleBooking}
-            className="w-full py-6 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-[var(--shadow-red-glow)] transition-all"
+            className="w-full py-6 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-[var(--shadow-red-glow)] transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-[0_0_50px_hsl(0_84%_60%_/_0.5)]"
           >
             Reservar Horário
           </Button>

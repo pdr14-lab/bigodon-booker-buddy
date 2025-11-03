@@ -23,7 +23,7 @@ export const TestimonialsSection = () => {
   return (
     <section className="py-16 px-4 bg-gradient-to-b from-background to-secondary/20">
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 animate-fade-in-up">
           <h2 className="text-4xl md:text-5xl font-black mb-4 text-foreground">
             O Que Dizem Nossos Clientes
           </h2>
@@ -36,7 +36,8 @@ export const TestimonialsSection = () => {
           {testimonials.map((testimonial, idx) => (
             <Card
               key={idx}
-              className="p-6 bg-card border-border hover:border-primary transition-all duration-300"
+              style={{ animationDelay: `${idx * 0.15}s` }}
+              className="p-6 bg-card border-border hover:border-primary transition-all duration-300 hover:scale-105 hover:shadow-[var(--shadow-red-glow)] animate-fade-in-up"
             >
               <div className="flex gap-1 mb-4">
                 {[...Array(testimonial.rating)].map((_, i) => (

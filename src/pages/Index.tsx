@@ -11,7 +11,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Hero Section */}
-      <header className="relative h-[70vh] flex items-center justify-center overflow-hidden border-b-4 border-primary">
+      <header className="relative h-[70vh] flex items-center justify-center overflow-hidden border-b-4 border-primary animate-fade-in">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImage})` }}
@@ -20,13 +20,13 @@ const Index = () => {
         </div>
         
         <div className="relative z-10 text-center px-4">
-          <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="flex items-center justify-center gap-3 mb-4 animate-bounce-in">
             <Scissors className="w-12 h-12 text-primary" />
           </div>
-          <h1 className="text-5xl md:text-7xl font-black tracking-wider mb-4 text-foreground drop-shadow-[0_0_20px_rgba(220,38,38,0.5)]">
+          <h1 className="text-5xl md:text-7xl font-black tracking-wider mb-4 text-foreground drop-shadow-[0_0_20px_rgba(220,38,38,0.5)] animate-fade-in-up">
             DON BIGODON
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground font-light tracking-wide">
+          <p className="text-xl md:text-2xl text-muted-foreground font-light tracking-wide animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
             Tradição, Estilo e Atitude
           </p>
         </div>
@@ -34,9 +34,9 @@ const Index = () => {
 
       {/* Info Section */}
       <section className="py-12 bg-gradient-to-b from-background to-secondary/20">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 animate-fade-in-up">
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center p-6 bg-card rounded-lg border border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)]">
+            <div className="text-center p-6 bg-card rounded-lg border border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)] hover:scale-105 animate-slide-in-right">
               <Clock className="w-10 h-10 text-primary mx-auto mb-3" />
               <h3 className="font-bold text-lg mb-2 text-foreground">Horários</h3>
               <p className="text-sm text-muted-foreground">Seg-Sex: 08h - 20h</p>
@@ -44,7 +44,7 @@ const Index = () => {
               <p className="text-sm text-muted-foreground">Dom: Fechado</p>
             </div>
             
-            <div className="text-center p-6 bg-card rounded-lg border border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)]">
+            <div className="text-center p-6 bg-card rounded-lg border border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)] hover:scale-105 animate-scale-in" style={{ animationDelay: "0.2s" }}>
               <Scissors className="w-10 h-10 text-primary mx-auto mb-3" />
               <h3 className="font-bold text-lg mb-2 text-foreground">Serviços</h3>
               <p className="text-sm text-muted-foreground">Corte tradicional</p>
@@ -52,7 +52,7 @@ const Index = () => {
               <p className="text-sm text-muted-foreground">Tratamentos</p>
             </div>
             
-            <div className="text-center p-6 bg-card rounded-lg border border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)]">
+            <div className="text-center p-6 bg-card rounded-lg border border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)] hover:scale-105 animate-slide-in-left" style={{ animationDelay: "0.4s" }}>
               <MapPin className="w-10 h-10 text-primary mx-auto mb-3" />
               <h3 className="font-bold text-lg mb-2 text-foreground">Localização</h3>
               <p className="text-sm text-muted-foreground">Centro da cidade</p>

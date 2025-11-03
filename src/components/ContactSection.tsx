@@ -5,7 +5,7 @@ export const ContactSection = () => {
   return (
     <section className="py-16 px-4 bg-secondary/30">
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 animate-fade-in-up">
           <h2 className="text-4xl md:text-5xl font-black mb-4 text-foreground">
             Venha Nos Visitar
           </h2>
@@ -15,7 +15,7 @@ export const ContactSection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <Card className="p-8 bg-card border-border">
+          <Card className="p-8 bg-card border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)] animate-slide-in-right">
             <h3 className="text-2xl font-bold mb-6 text-foreground">
               Informações de Contato
             </h3>
@@ -64,13 +64,13 @@ export const ContactSection = () => {
                 <div className="flex gap-4">
                   <a
                     href="#"
-                    className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all"
+                    className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:scale-110 transition-all duration-300"
                   >
                     <Instagram className="w-5 h-5" />
                   </a>
                   <a
                     href="#"
-                    className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all"
+                    className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:scale-110 transition-all duration-300"
                   >
                     <Facebook className="w-5 h-5" />
                   </a>
@@ -79,7 +79,7 @@ export const ContactSection = () => {
             </div>
           </Card>
 
-          <Card className="p-8 bg-card border-border">
+          <Card className="p-8 bg-card border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)] animate-slide-in-left">
             <h3 className="text-2xl font-bold mb-6 text-foreground">
               Localização
             </h3>
