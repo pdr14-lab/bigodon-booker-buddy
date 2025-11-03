@@ -3,7 +3,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Scissors, Calendar, TrendingUp, Users, DollarSign, Trash2, Search } from "lucide-react";
+import { Scissors, Calendar, TrendingUp, Users, DollarSign, Trash2, Search, AlertCircle } from "lucide-react";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { toast } from "sonner";
 
 interface Booking {
   date: string;
@@ -23,6 +25,9 @@ export const AdminPanel = () => {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [filterService, setFilterService] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [clearDialogOpen, setClearDialogOpen] = useState(false);
+  const [bookingToDelete, setBookingToDelete] = useState<{ date: string; time: string } | null>(null);
 
   const ADMIN_PASSWORD = "bigodon123";
 
@@ -46,8 +51,11 @@ export const AdminPanel = () => {
     if (password === ADMIN_PASSWORD) {
       setIsAuthenticated(true);
       setPassword("");
+      toast.success("Login realizado com sucesso!");
     } else {
-      alert("Senha incorreta");
+      toast.error("Senha incorreta", {
+        icon: <AlertCircle className="w-5 h-5" />,
+      });
       setPassword("");
     }
   };
@@ -58,21 +66,36 @@ export const AdminPanel = () => {
       .sort((a, b) => a.time.localeCompare(b.time));
   };
 
-  const deleteBooking = (date: string, time: string) => {
-    if (confirm("Deseja realmente cancelar este agendamento?")) {
-      const updated = bookings.filter((b) => !(b.date === date && b.time === time));
+  const initiateDeleteBooking = (date: string, time: string) => {
+    setBookingToDelete({ date, time });
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDeleteBooking = () => {
+    if (bookingToDelete) {
+      const updated = bookings.filter(
+        (b) => !(b.date === bookingToDelete.date && b.time === bookingToDelete.time)
+      );
       localStorage.setItem("donBigodonBookings", JSON.stringify(updated));
       setBookings(updated);
+      toast.success("Agendamento cancelado com sucesso!");
+      setDeleteDialogOpen(false);
+      setBookingToDelete(null);
     }
   };
 
-  const clearOldBookings = () => {
-    if (confirm("Deseja limpar todos os agendamentos passados?")) {
-      const today = new Date().toISOString().split("T")[0];
-      const updated = bookings.filter((b) => b.date >= today);
-      localStorage.setItem("donBigodonBookings", JSON.stringify(updated));
-      setBookings(updated);
-    }
+  const initiateClearOldBookings = () => {
+    setClearDialogOpen(true);
+  };
+
+  const confirmClearOldBookings = () => {
+    const today = new Date().toISOString().split("T")[0];
+    const updated = bookings.filter((b) => b.date >= today);
+    const removedCount = bookings.length - updated.length;
+    localStorage.setItem("donBigodonBookings", JSON.stringify(updated));
+    setBookings(updated);
+    toast.success(`${removedCount} agendamento(s) antigo(s) removido(s)`);
+    setClearDialogOpen(false);
   };
 
   // Statistics
@@ -263,9 +286,9 @@ export const AdminPanel = () => {
               </Card>
 
               <Button
-                onClick={clearOldBookings}
+                onClick={initiateClearOldBookings}
                 variant="outline"
-                className="w-full"
+                className="w-full hover:bg-destructive/10 hover:text-destructive hover:border-destructive transition-all"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Limpar Agendamentos Passados
@@ -316,9 +339,10 @@ export const AdminPanel = () => {
                           </div>
                         </div>
                         <Button
-                          onClick={() => deleteBooking(booking.date, booking.time)}
+                          onClick={() => initiateDeleteBooking(booking.date, booking.time)}
                           variant="destructive"
                           size="sm"
+                          className="hover:scale-105 transition-all"
                         >
                           Cancelar
                         </Button>
@@ -392,9 +416,10 @@ export const AdminPanel = () => {
                           </div>
                         </div>
                         <Button
-                          onClick={() => deleteBooking(booking.date, booking.time)}
+                          onClick={() => initiateDeleteBooking(booking.date, booking.time)}
                           variant="destructive"
                           size="sm"
+                          className="hover:scale-105 transition-all"
                         >
                           Cancelar
                         </Button>
@@ -406,6 +431,28 @@ export const AdminPanel = () => {
             </TabsContent>
           </Tabs>
         )}
+
+        <ConfirmDialog
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          onConfirm={confirmDeleteBooking}
+          title="Cancelar Agendamento"
+          description="Deseja realmente cancelar este agendamento? Esta ação não pode ser desfeita."
+          confirmText="Sim, cancelar"
+          cancelText="Não, manter"
+          variant="destructive"
+        />
+
+        <ConfirmDialog
+          open={clearDialogOpen}
+          onOpenChange={setClearDialogOpen}
+          onConfirm={confirmClearOldBookings}
+          title="Limpar Agendamentos Passados"
+          description="Deseja realmente remover todos os agendamentos de datas passadas? Esta ação não pode ser desfeita."
+          confirmText="Sim, limpar"
+          cancelText="Cancelar"
+          variant="destructive"
+        />
       </Card>
     </div>
   );

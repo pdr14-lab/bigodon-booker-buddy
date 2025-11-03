@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { bookingSchema } from "@/lib/validation";
+import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 
 interface Booking {
   date: string;
@@ -37,6 +40,9 @@ export const BookingCalendar = () => {
   const [selectedService, setSelectedService] = useState("");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const stored = localStorage.getItem("donBigodonBookings");
@@ -61,53 +67,88 @@ export const BookingCalendar = () => {
     return bookings.some((b) => b.date === date && b.time === time);
   };
 
-  const handleBooking = () => {
-    if (!selectedDate) {
-      toast.error("Selecione uma data");
-      return;
-    }
-    if (!selectedTime) {
-      toast.error("Selecione um horário");
-      return;
-    }
-    if (!clientName.trim()) {
-      toast.error("Digite seu nome");
-      return;
-    }
-    if (!clientPhone.trim()) {
-      toast.error("Digite seu telefone");
-      return;
-    }
-    if (!selectedService) {
-      toast.error("Selecione um serviço");
-      return;
+  const validateForm = () => {
+    setErrors({});
+    
+    const result = bookingSchema.safeParse({
+      clientName,
+      clientPhone,
+      selectedService,
+      selectedDate,
+      selectedTime,
+    });
+
+    if (!result.success) {
+      const newErrors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0] as string;
+        newErrors[field] = issue.message;
+      });
+      setErrors(newErrors);
+      
+      const firstError = result.error.issues[0];
+      toast.error(firstError.message, {
+        icon: <AlertCircle className="w-5 h-5" />,
+      });
+      return false;
     }
 
     const dayOfWeek = new Date(selectedDate + "T00:00:00").getDay();
     if (dayOfWeek === 0) {
       toast.error("A barbearia está fechada aos domingos");
-      return;
+      return false;
     }
 
     if (isTimeBooked(selectedDate, selectedTime)) {
       toast.error("Este horário já está reservado");
-      return;
+      return false;
     }
 
-    const newBooking: Booking = {
-      date: selectedDate,
-      time: selectedTime,
-      clientName: clientName.trim(),
-      clientPhone: clientPhone.trim(),
-      service: selectedService,
-    };
+    return true;
+  };
 
-    saveBookings([...bookings, newBooking]);
-    toast.success("Horário reservado com sucesso!");
-    setClientName("");
-    setClientPhone("");
-    setSelectedService("");
-    setSelectedTime("");
+  const handleBookingClick = () => {
+    if (validateForm()) {
+      setConfirmDialogOpen(true);
+    }
+  };
+
+  const confirmBooking = () => {
+    setIsSubmitting(true);
+    
+    // Simula um pequeno delay para feedback visual
+    setTimeout(() => {
+      const newBooking: Booking = {
+        date: selectedDate,
+        time: selectedTime,
+        clientName: clientName.trim(),
+        clientPhone: clientPhone.trim(),
+        service: selectedService,
+      };
+
+      saveBookings([...bookings, newBooking]);
+      
+      toast.success(
+        <div className="flex items-center gap-2">
+          <CheckCircle2 className="w-5 h-5" />
+          <div>
+            <p className="font-bold">Agendamento confirmado!</p>
+            <p className="text-sm text-muted-foreground">
+              {new Date(selectedDate + "T00:00:00").toLocaleDateString('pt-BR')} às {selectedTime}
+            </p>
+          </div>
+        </div>,
+        { duration: 5000 }
+      );
+      
+      setClientName("");
+      setClientPhone("");
+      setSelectedService("");
+      setSelectedTime("");
+      setErrors({});
+      setConfirmDialogOpen(false);
+      setIsSubmitting(false);
+    }, 800);
   };
 
   const availableHours = selectedDate ? getAvailableHours(selectedDate) : [];
@@ -246,10 +287,20 @@ export const BookingCalendar = () => {
               <input
                 type="text"
                 value={clientName}
-                onChange={(e) => setClientName(e.target.value)}
-                className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                onChange={(e) => {
+                  setClientName(e.target.value);
+                  if (errors.clientName) {
+                    setErrors({ ...errors, clientName: "" });
+                  }
+                }}
+                className={`w-full px-4 py-3 bg-secondary border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                  errors.clientName ? "border-destructive" : "border-border"
+                }`}
                 placeholder="Digite seu nome completo"
               />
+              {errors.clientName && (
+                <p className="text-sm text-destructive mt-1 animate-fade-in">{errors.clientName}</p>
+              )}
             </div>
 
             <div>
@@ -259,10 +310,20 @@ export const BookingCalendar = () => {
               <input
                 type="tel"
                 value={clientPhone}
-                onChange={(e) => setClientPhone(e.target.value)}
-                className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                onChange={(e) => {
+                  setClientPhone(e.target.value);
+                  if (errors.clientPhone) {
+                    setErrors({ ...errors, clientPhone: "" });
+                  }
+                }}
+                className={`w-full px-4 py-3 bg-secondary border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                  errors.clientPhone ? "border-destructive" : "border-border"
+                }`}
                 placeholder="(00) 00000-0000"
               />
+              {errors.clientPhone && (
+                <p className="text-sm text-destructive mt-1 animate-fade-in">{errors.clientPhone}</p>
+              )}
             </div>
           </div>
 
@@ -272,8 +333,15 @@ export const BookingCalendar = () => {
             </label>
             <select
               value={selectedService}
-              onChange={(e) => setSelectedService(e.target.value)}
-              className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+              onChange={(e) => {
+                setSelectedService(e.target.value);
+                if (errors.selectedService) {
+                  setErrors({ ...errors, selectedService: "" });
+                }
+              }}
+              className={`w-full px-4 py-3 bg-secondary border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                errors.selectedService ? "border-destructive" : "border-border"
+              }`}
             >
               <option value="">Selecione um serviço</option>
               {SERVICES.map((service) => (
@@ -282,6 +350,9 @@ export const BookingCalendar = () => {
                 </option>
               ))}
             </select>
+            {errors.selectedService && (
+              <p className="text-sm text-destructive mt-1 animate-fade-in">{errors.selectedService}</p>
+            )}
           </div>
 
           <div>
@@ -333,13 +404,31 @@ export const BookingCalendar = () => {
           )}
 
           <Button
-            onClick={handleBooking}
-            className="w-full py-6 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-[var(--shadow-red-glow)] transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-[0_0_50px_hsl(0_84%_60%_/_0.5)]"
+            onClick={handleBookingClick}
+            disabled={isSubmitting}
+            className="w-full py-6 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-[var(--shadow-red-glow)] transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-[0_0_50px_hsl(0_84%_60%_/_0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Reservar Horário
+            {isSubmitting ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Processando...
+              </span>
+            ) : (
+              "Reservar Horário"
+            )}
           </Button>
         </div>
       </Card>
+
+      <ConfirmDialog
+        open={confirmDialogOpen}
+        onOpenChange={setConfirmDialogOpen}
+        onConfirm={confirmBooking}
+        title="Confirmar Agendamento"
+        description={`Deseja confirmar o agendamento para ${clientName} no dia ${new Date(selectedDate + "T00:00:00").toLocaleDateString('pt-BR')} às ${selectedTime}?`}
+        confirmText="Confirmar Agendamento"
+        cancelText="Revisar"
+      />
     </div>
   );
 };
