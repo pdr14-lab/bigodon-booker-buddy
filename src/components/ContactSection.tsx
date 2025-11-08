@@ -3,31 +3,31 @@ import { Card } from "@/components/ui/card";
 
 export const ContactSection = () => {
   return (
-    <section className="py-16 px-4 bg-secondary/30">
+    <section className="py-8 sm:py-12 md:py-16 px-4 bg-secondary/30">
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-12 animate-fade-in-up">
-          <h2 className="text-4xl md:text-5xl font-black mb-4 text-foreground">
+        <div className="text-center mb-8 sm:mb-10 md:mb-12 animate-fade-in-up">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-3 sm:mb-4 text-foreground">
             Venha Nos Visitar
           </h2>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground">
             Estamos te esperando para um atendimento de primeira
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <Card className="p-8 bg-card border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)] animate-slide-in-right">
-            <h3 className="text-2xl font-bold mb-6 text-foreground">
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+          <Card className="p-4 sm:p-6 md:p-8 bg-card border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)] animate-slide-in-right">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 sm:mb-5 md:mb-6 text-foreground">
               Informações de Contato
             </h3>
             
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                  <MapPin className="w-6 h-6 text-primary" />
+            <div className="space-y-4 sm:space-y-5 md:space-y-6">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                  <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-foreground mb-1">Endereço</h4>
-                  <p className="text-muted-foreground">
+                  <h4 className="font-bold text-sm sm:text-base text-foreground mb-1">Endereço</h4>
+                  <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
                     Rua Principal, 123 - Centro<br />
                     São Paulo - SP, 01234-567
                   </p>
@@ -79,8 +79,8 @@ export const ContactSection = () => {
             </div>
           </Card>
 
-          <Card className="p-8 bg-card border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)] animate-slide-in-left">
-            <h3 className="text-2xl font-bold mb-6 text-foreground">
+          <Card className="p-4 sm:p-6 md:p-8 bg-card border-border hover:border-primary transition-all duration-300 hover:shadow-[var(--shadow-red-glow)] animate-slide-in-left">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 sm:mb-5 md:mb-6 text-foreground">
               Localização
             </h3>
             <div className="aspect-video bg-secondary/50 rounded-lg overflow-hidden">

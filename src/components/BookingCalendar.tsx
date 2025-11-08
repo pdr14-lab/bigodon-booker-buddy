@@ -210,20 +210,20 @@ export const BookingCalendar = () => {
   const monthName = currentMonth.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-8 animate-fade-in-up">
+    <div className="w-full max-w-4xl mx-auto space-y-4 sm:space-y-6 md:space-y-8 animate-fade-in-up">
       {/* Days with bookings indicator */}
-      <Card className="p-6 bg-card border-border hover:shadow-[var(--shadow-red-glow)] transition-all duration-300">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-foreground capitalize">
+      <Card className="p-3 sm:p-4 md:p-6 bg-card border-border hover:shadow-[var(--shadow-red-glow)] transition-all duration-300">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <h3 className="text-sm sm:text-base md:text-lg font-bold text-foreground capitalize">
             {monthName}
           </h3>
-          <div className="flex gap-2">
+          <div className="flex gap-1 sm:gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={goToPreviousMonth}
               disabled={currentMonth.getMonth() === new Date().getMonth() && currentMonth.getFullYear() === new Date().getFullYear()}
-              className="hover:bg-primary/20 hover:scale-105 transition-all duration-200"
+              className="hover:bg-primary/20 hover:scale-105 transition-all duration-200 h-8 w-8 p-0 sm:h-9 sm:w-auto sm:px-3"
             >
               ←
             </Button>
@@ -231,19 +231,19 @@ export const BookingCalendar = () => {
               variant="outline"
               size="sm"
               onClick={goToNextMonth}
-              className="hover:bg-primary/20 hover:scale-105 transition-all duration-200"
+              className="hover:bg-primary/20 hover:scale-105 transition-all duration-200 h-8 w-8 p-0 sm:h-9 sm:w-auto sm:px-3"
             >
               →
             </Button>
           </div>
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        <div className="flex gap-2 overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0">
           {daysWithBookings.map((day, idx) => (
             <button
               key={day.date}
               onClick={() => setSelectedDate(day.date)}
               style={{ animationDelay: `${idx * 0.05}s` }}
-              className={`flex-shrink-0 p-3 rounded-lg border transition-all duration-300 animate-scale-in hover:scale-110 ${
+              className={`flex-shrink-0 p-2 sm:p-3 rounded-lg border transition-all duration-300 animate-scale-in hover:scale-110 min-w-[70px] sm:min-w-[80px] ${
                 selectedDate === day.date
                   ? "bg-primary text-primary-foreground border-primary shadow-[var(--shadow-red-glow)] scale-110"
                   : day.bookings >= day.maxSlots
@@ -255,17 +255,17 @@ export const BookingCalendar = () => {
               disabled={day.bookings >= day.maxSlots}
             >
               <div className="text-center">
-                <div className="text-xs text-muted-foreground mb-1">{day.month}</div>
-                <div className="text-xl font-bold mb-1">{day.display}</div>
+                <div className="text-[10px] sm:text-xs text-muted-foreground mb-1">{day.month}</div>
+                <div className="text-lg sm:text-xl font-bold mb-1">{day.display}</div>
                 {day.bookings > 0 ? (
                   <Badge 
                     variant={day.bookings >= day.maxSlots ? "destructive" : "secondary"}
-                    className="text-xs"
+                    className="text-[10px] sm:text-xs"
                   >
                     {day.bookings}/{day.maxSlots}
                   </Badge>
                 ) : (
-                  <div className="text-xs text-muted-foreground">Livre</div>
+                  <div className="text-[10px] sm:text-xs text-muted-foreground">Livre</div>
                 )}
               </div>
             </button>
@@ -273,15 +273,15 @@ export const BookingCalendar = () => {
         </div>
       </Card>
 
-      <Card className="p-8 bg-card border-border shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-red-glow)] transition-all duration-500 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-        <h2 className="text-3xl font-bold text-center mb-8 text-foreground animate-fade-in">
+      <Card className="p-4 sm:p-6 md:p-8 bg-card border-border shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-red-glow)] transition-all duration-500 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-4 sm:mb-6 md:mb-8 text-foreground animate-fade-in">
           Agendar Horário
         </h2>
 
-        <div className="space-y-6">
-          <div className="grid md:grid-cols-2 gap-6">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
-              <label className="block text-sm font-medium mb-2 text-muted-foreground">
+              <label className="block text-xs sm:text-sm font-medium mb-2 text-muted-foreground">
                 Seu Nome
               </label>
               <input
@@ -293,18 +293,18 @@ export const BookingCalendar = () => {
                     setErrors({ ...errors, clientName: "" });
                   }
                 }}
-                className={`w-full px-4 py-3 bg-secondary border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-secondary border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
                   errors.clientName ? "border-destructive" : "border-border"
                 }`}
                 placeholder="Digite seu nome completo"
               />
               {errors.clientName && (
-                <p className="text-sm text-destructive mt-1 animate-fade-in">{errors.clientName}</p>
+                <p className="text-xs sm:text-sm text-destructive mt-1 animate-fade-in">{errors.clientName}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 text-muted-foreground">
+              <label className="block text-xs sm:text-sm font-medium mb-2 text-muted-foreground">
                 Seu Telefone/WhatsApp
               </label>
               <input
@@ -316,19 +316,19 @@ export const BookingCalendar = () => {
                     setErrors({ ...errors, clientPhone: "" });
                   }
                 }}
-                className={`w-full px-4 py-3 bg-secondary border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-secondary border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
                   errors.clientPhone ? "border-destructive" : "border-border"
                 }`}
                 placeholder="(00) 00000-0000"
               />
               {errors.clientPhone && (
-                <p className="text-sm text-destructive mt-1 animate-fade-in">{errors.clientPhone}</p>
+                <p className="text-xs sm:text-sm text-destructive mt-1 animate-fade-in">{errors.clientPhone}</p>
               )}
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-muted-foreground">
+            <label className="block text-xs sm:text-sm font-medium mb-2 text-muted-foreground">
               Escolha o Serviço
             </label>
             <select
@@ -339,7 +339,7 @@ export const BookingCalendar = () => {
                   setErrors({ ...errors, selectedService: "" });
                 }
               }}
-              className={`w-full px-4 py-3 bg-secondary border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+              className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-secondary border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
                 errors.selectedService ? "border-destructive" : "border-border"
               }`}
             >
@@ -351,12 +351,12 @@ export const BookingCalendar = () => {
               ))}
             </select>
             {errors.selectedService && (
-              <p className="text-sm text-destructive mt-1 animate-fade-in">{errors.selectedService}</p>
+              <p className="text-xs sm:text-sm text-destructive mt-1 animate-fade-in">{errors.selectedService}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-muted-foreground">
+            <label className="block text-xs sm:text-sm font-medium mb-2 text-muted-foreground">
               Selecione o Dia
             </label>
             <input
@@ -364,7 +364,7 @@ export const BookingCalendar = () => {
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
               min={new Date().toISOString().split("T")[0]}
-              className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
             />
           </div>
 
@@ -376,10 +376,10 @@ export const BookingCalendar = () => {
 
           {selectedDate && dayOfWeek !== 0 && (
             <div>
-              <label className="block text-sm font-medium mb-2 text-muted-foreground">
+              <label className="block text-xs sm:text-sm font-medium mb-2 text-muted-foreground">
                 Horários Disponíveis
               </label>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 sm:gap-3">
                 {availableHours.map((hour) => {
                   const isBooked = isTimeBooked(selectedDate, hour);
                   return (
@@ -387,7 +387,7 @@ export const BookingCalendar = () => {
                       key={hour}
                       onClick={() => !isBooked && setSelectedTime(hour)}
                       disabled={isBooked}
-                      className={`px-4 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105 active:scale-95 ${
+                      className={`px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-xs sm:text-sm md:text-base rounded-lg font-medium transition-all duration-300 hover:scale-105 active:scale-95 ${
                         isBooked
                           ? "bg-destructive/20 text-destructive/60 cursor-not-allowed line-through"
                           : selectedTime === hour
@@ -406,12 +406,12 @@ export const BookingCalendar = () => {
           <Button
             onClick={handleBookingClick}
             disabled={isSubmitting}
-            className="w-full py-6 text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-[var(--shadow-red-glow)] transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-[0_0_50px_hsl(0_84%_60%_/_0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-4 sm:py-5 md:py-6 text-base sm:text-lg font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-[var(--shadow-red-glow)] transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-[0_0_50px_hsl(0_84%_60%_/_0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <span className="flex items-center gap-2">
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Processando...
+                <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
+                <span className="text-sm sm:text-base md:text-lg">Processando...</span>
               </span>
             ) : (
               "Reservar Horário"
