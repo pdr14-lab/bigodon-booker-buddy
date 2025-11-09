@@ -25,8 +25,10 @@ export const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-sm sm:text-base text-foreground mb-1">Endereço</h4>
-                  <p className="text-xs sm:text-sm md:text-base text-muted-foreground">Rua Lourenço Moreira da Silva, 48 - Ponta Verde, Maceió, Brazil <br />
-                    São Paulo - SP, 01234-567
+                  <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
+                    Rua Lourenço Moreira da Silva, 48<br />
+                    Ponta Verde, Maceió - AL<br />
+                    Brasil
                   </p>
                 </div>
               </div>
@@ -37,9 +39,8 @@ export const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-foreground mb-1">Telefone/WhatsApp</h4>
-                  <p className="text-muted-foreground">(82) 99120-6336
-(82) 99120-6336<br />
-                    (11) 3456-7890
+                  <p className="text-muted-foreground">
+                    (82) 99120-6336
                   </p>
                 </div>
               </div>
@@ -73,7 +74,7 @@ export const ContactSection = () => {
               Localização
             </h3>
             <div className="aspect-video bg-secondary/50 rounded-lg overflow-hidden">
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.0983!2d-46.6333!3d-23.5505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMzJzAxLjgiUyA0NsKwMzcnNTkuOSJX!5e0!3m2!1spt-BR!2sbr!4v1234567890" width="100%" height="100%" style={{
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3933.0279837698194!2d-35.70934892407965!3d-9.670828990463594!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x701459d8c9bffa1%3A0x8c4b38e9cfe3ce3c!2sR.%20Louren%C3%A7o%20Moreira%20da%20Silva%2C%2048%20-%20Ponta%20Verde%2C%20Macei%C3%B3%20-%20AL!5e0!3m2!1spt-BR!2sbr!4v1234567890" width="100%" height="100%" style={{
               border: 0
             }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Localização Don Bigodon"></iframe>
             </div>
