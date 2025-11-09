@@ -26,10 +26,27 @@ const HOURS_SATURDAY = Array.from({ length: 11 }, (_, i) => {
 });
 
 const SERVICES = [
-  { id: "corte", name: "Corte Tradicional", price: "R$ 40" },
-  { id: "barba", name: "Barba & Bigode", price: "R$ 35" },
-  { id: "combo", name: "Corte + Barba", price: "R$ 65" },
-  { id: "tratamento", name: "Tratamento Capilar", price: "R$ 50" },
+  // Cabelos
+  { id: "corte-maquina-simples", name: "Corte Máquina Simples", price: "R$ 25" },
+  { id: "corte-maquina-tesoura", name: "Corte Máquina e Tesoura", price: "R$ 35" },
+  { id: "corte-degrade", name: "Corte Degradê", price: "R$ 35" },
+  { id: "corte-navalhado", name: "Corte Navalhado", price: "R$ 40" },
+  { id: "corte-tesoura", name: "Corte Tesoura", price: "R$ 40" },
+  { id: "corte-infantil", name: "Corte Infantil", price: "R$ 50" },
+  { id: "pezinho", name: "Pezinho (Cantinho)", price: "R$ 20" },
+  { id: "razor", name: "Razor / Risca (Listra)", price: "R$ 10" },
+  { id: "sobrancelhas", name: "Sobrancelhas", price: "R$ 15" },
+  // Barba e Cuidados
+  { id: "barba", name: "Barba", price: "R$ 35" },
+  { id: "barboterapia", name: "Barboterapia", price: "R$ 50" },
+  { id: "barba-maquina", name: "Passar a Máquina na Barba", price: "R$ 20" },
+  { id: "limpeza-facial", name: "Limpeza Facial", price: "R$ 30" },
+  { id: "depilacao-costas", name: "Depilação Costas (Máquina)", price: "R$ 20" },
+  // Tratamentos e Estilo
+  { id: "selagem", name: "Selagem", price: "A partir de R$ 80" },
+  { id: "lavagem", name: "Lavagem", price: "R$ 20" },
+  { id: "esfoliacao", name: "Esfoliação", price: "R$ 20" },
+  { id: "penteado", name: "Penteado", price: "R$ 30" },
 ];
 
 export const BookingCalendar = () => {
