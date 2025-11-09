@@ -39,9 +39,9 @@ export const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-foreground mb-1">Telefone/WhatsApp</h4>
-                  <p className="text-muted-foreground">
+                  <a href="https://wa.me/5582991206336?text=Fala%2C%20pessoal%20da%20Don%20Bigodon!%20%F0%9F%91%8A%20Quero%20marcar%20meu%20corte%20%2F%20barba%20%F0%9F%94%A5" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                     (82) 99120-6336
-                  </p>
+                  </a>
                 </div>
               </div>
 
@@ -58,10 +58,10 @@ export const ContactSection = () => {
               <div className="pt-4 border-t border-border">
                 <h4 className="font-bold text-foreground mb-3">Redes Sociais</h4>
                 <div className="flex gap-4">
-                  <a href="#" className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:scale-110 transition-all duration-300">
+                  <a href="https://www.instagram.com/barbeariadonbigodon?igsh=MTRzdXEzNG9ueW11Ng==" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:scale-110 transition-all duration-300">
                     <Instagram className="w-5 h-5" />
                   </a>
-                  <a href="#" className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:scale-110 transition-all duration-300">
+                  <a href="https://www.facebook.com/share/19dxGEeGmw/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center hover:bg-primary hover:text-primary-foreground hover:scale-110 transition-all duration-300">
                     <Facebook className="w-5 h-5" />
                   </a>
                 </div>
