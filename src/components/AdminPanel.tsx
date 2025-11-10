@@ -32,10 +32,27 @@ export const AdminPanel = () => {
   const ADMIN_PASSWORD = "bigodon123";
 
   const SERVICES = [
-    { name: "Corte Tradicional", price: 40 },
-    { name: "Barba & Bigode", price: 35 },
-    { name: "Corte + Barba", price: 65 },
-    { name: "Tratamento Capilar", price: 50 },
+    // Cabelos
+    { name: "Corte Máquina Simples", price: 25 },
+    { name: "Corte Máquina e Tesoura", price: 35 },
+    { name: "Corte Degradê", price: 35 },
+    { name: "Corte Navalhado", price: 40 },
+    { name: "Corte Tesoura", price: 40 },
+    { name: "Corte Infantil", price: 50 },
+    { name: "Pezinho (Cantinho)", price: 20 },
+    { name: "Razor / Risca (Listra)", price: 10 },
+    { name: "Sobrancelhas", price: 15 },
+    // Barba e Cuidados
+    { name: "Barba", price: 35 },
+    { name: "Barboterapia", price: 50 },
+    { name: "Passar a Máquina na Barba", price: 20 },
+    { name: "Limpeza Facial", price: 30 },
+    { name: "Depilação Costas (Máquina)", price: 20 },
+    // Tratamentos e Estilo
+    { name: "Selagem", price: 80 },
+    { name: "Lavagem", price: 20 },
+    { name: "Esfoliação", price: 20 },
+    { name: "Penteado", price: 30 },
   ];
 
   useEffect(() => {
