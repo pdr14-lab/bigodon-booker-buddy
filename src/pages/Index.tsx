@@ -22,13 +22,12 @@ const Index = () => {
         <div className="relative z-10 text-center px-4">
           <div className="flex items-center justify-center gap-3 mb-3 sm:mb-4 animate-bounce-in">
             <svg 
-              className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-primary" 
-              viewBox="0 0 24 24" 
+              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-primary" 
+              viewBox="0 0 512 512" 
               fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path d="M3 14c0-2.5 2-4 4-4s3 1 4 2c1-1 2-2 4-2s4 1.5 4 4c0 3-2 5-4 5s-3-1-4-2c-1 1-2 2-4 2s-4-2-4-5z" />
-              <path d="M7 10c1.5 0 2.5-1.5 2.5-3S8.5 4 7 4 4.5 5.5 4.5 7 5.5 10 7 10zm10 0c-1.5 0-2.5-1.5-2.5-3S15.5 4 17 4s2.5 1.5 2.5 3-1 3-2.5 3z" />
+              <path d="M416 240c-35.3 0-64 28.7-64 64 0 17.7-14.3 32-32 32s-32-14.3-32-32v-16c0-35.3-28.7-64-64-64s-64 28.7-64 64v16c0 17.7-14.3 32-32 32s-32-14.3-32-32c0-35.3-28.7-64-64-64-53 0-96 43-96 96s43 96 96 96c35.3 0 64-28.7 64-64 0-17.7 14.3-32 32-32s32 14.3 32 32v16c0 35.3 28.7 64 64 64s64-28.7 64-64v-16c0-17.7 14.3-32 32-32s32 14.3 32 32c0 35.3 28.7 64 64 64 53 0 96-43 96-96s-43-96-96-96z"/>
             </svg>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black tracking-wider mb-2 sm:mb-4 text-foreground drop-shadow-[0_0_20px_rgba(220,38,38,0.5)] animate-fade-in-up">
