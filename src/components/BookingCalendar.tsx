@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { bookingSchema } from "@/lib/validation";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface Booking {
   date: string;
@@ -54,7 +55,7 @@ export const BookingCalendar = () => {
   const [selectedTime, setSelectedTime] = useState("");
   const [clientName, setClientName] = useState("");
   const [clientPhone, setClientPhone] = useState("");
-  const [selectedService, setSelectedService] = useState("");
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
@@ -84,13 +85,30 @@ export const BookingCalendar = () => {
     return bookings.some((b) => b.date === date && b.time === time);
   };
 
+  const toggleService = (serviceName: string) => {
+    setSelectedServices((prev) =>
+      prev.includes(serviceName)
+        ? prev.filter((s) => s !== serviceName)
+        : [...prev, serviceName]
+    );
+    if (errors.selectedServices) {
+      setErrors({ ...errors, selectedServices: "" });
+    }
+  };
+
+  const getSelectedServicesText = () => {
+    if (selectedServices.length === 0) return "";
+    const services = SERVICES.filter((s) => selectedServices.includes(s.name));
+    return services.map((s) => s.name).join(", ");
+  };
+
   const validateForm = () => {
     setErrors({});
     
     const result = bookingSchema.safeParse({
       clientName,
       clientPhone,
-      selectedService,
+      selectedServices,
       selectedDate,
       selectedTime,
     });
@@ -140,7 +158,7 @@ export const BookingCalendar = () => {
         time: selectedTime,
         clientName: clientName.trim(),
         clientPhone: clientPhone.trim(),
-        service: selectedService,
+        service: selectedServices.join(", "),
       };
 
       saveBookings([...bookings, newBooking]);
@@ -160,7 +178,7 @@ export const BookingCalendar = () => {
       
       setClientName("");
       setClientPhone("");
-      setSelectedService("");
+      setSelectedServices([]);
       setSelectedTime("");
       setErrors({});
       setConfirmDialogOpen(false);
@@ -346,29 +364,43 @@ export const BookingCalendar = () => {
 
           <div>
             <label className="block text-xs sm:text-sm font-medium mb-2 text-muted-foreground">
-              Escolha o Serviço
+              Escolha os Serviços
+              {selectedServices.length > 0 && (
+                <Badge variant="secondary" className="ml-2">
+                  {selectedServices.length} selecionado{selectedServices.length > 1 ? "s" : ""}
+                </Badge>
+              )}
             </label>
-            <select
-              value={selectedService}
-              onChange={(e) => {
-                setSelectedService(e.target.value);
-                if (errors.selectedService) {
-                  setErrors({ ...errors, selectedService: "" });
-                }
-              }}
-              className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-secondary border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                errors.selectedService ? "border-destructive" : "border-border"
-              }`}
-            >
-              <option value="">Selecione um serviço</option>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 sm:p-4 bg-secondary border rounded-lg max-h-64 overflow-y-auto ${
+              errors.selectedServices ? "border-destructive" : "border-border"
+            }`}>
               {SERVICES.map((service) => (
-                <option key={service.id} value={service.name}>
-                  {service.name} - {service.price}
-                </option>
+                <label
+                  key={service.id}
+                  className={`flex items-center gap-3 p-2 sm:p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-primary/10 ${
+                    selectedServices.includes(service.name)
+                      ? "bg-primary/20 border border-primary"
+                      : "bg-background border border-transparent"
+                  }`}
+                >
+                  <Checkbox
+                    checked={selectedServices.includes(service.name)}
+                    onCheckedChange={() => toggleService(service.name)}
+                    className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs sm:text-sm font-medium text-foreground truncate">
+                      {service.name}
+                    </p>
+                    <p className="text-xs text-primary font-semibold">
+                      {service.price}
+                    </p>
+                  </div>
+                </label>
               ))}
-            </select>
-            {errors.selectedService && (
-              <p className="text-xs sm:text-sm text-destructive mt-1 animate-fade-in">{errors.selectedService}</p>
+            </div>
+            {errors.selectedServices && (
+              <p className="text-xs sm:text-sm text-destructive mt-1 animate-fade-in">{errors.selectedServices}</p>
             )}
           </div>
 
@@ -442,7 +474,7 @@ export const BookingCalendar = () => {
         onOpenChange={setConfirmDialogOpen}
         onConfirm={confirmBooking}
         title="Confirmar Agendamento"
-        description={`Deseja confirmar o agendamento para ${clientName} no dia ${new Date(selectedDate + "T00:00:00").toLocaleDateString('pt-BR')} às ${selectedTime}?`}
+        description={`Deseja confirmar o agendamento para ${clientName} no dia ${selectedDate ? new Date(selectedDate + "T00:00:00").toLocaleDateString('pt-BR') : ''} às ${selectedTime}? Serviços: ${getSelectedServicesText()}`}
         confirmText="Confirmar Agendamento"
         cancelText="Revisar"
       />

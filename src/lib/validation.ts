@@ -15,9 +15,9 @@ export const bookingSchema = z.object({
     .max(15, "Telefone inválido")
     .regex(/^[\d\s\-\(\)]+$/, "Telefone deve conter apenas números e símbolos"),
   
-  selectedService: z
-    .string()
-    .min(1, "Selecione um serviço"),
+  selectedServices: z
+    .array(z.string())
+    .min(1, "Selecione pelo menos um serviço"),
   
   selectedDate: z
     .string()
